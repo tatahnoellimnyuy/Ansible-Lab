@@ -1,60 +1,22 @@
-# Create a VPC
-resource "aws_vpc" "my-vpc" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support   = true
-  enable_dns_hostnames = true
-  tags = {
-    Name = "Ansible VPC"
-  }
+# create default vpc if one does not exit
+resource "aws_default_vpc" "default_vpc" {
 }
 
-# Create Web Public Subnet
-resource "aws_subnet" "web-subnet" {
-  vpc_id                  = aws_vpc.my-vpc.id
-  cidr_block              = "10.0.1.0/24"
-  map_public_ip_on_launch = true
+# use data source to get all avalablility zones in region
+data "aws_availability_zones" "available_zones" {}
 
-  tags = {
-    Name = "Ansible-subnet"
+# create default subnet if one does not exit
+resource "aws_default_subnet" "default_az1" {
+  availability_zone = data.aws_availability_zones.available_zones.names[0]
+  tags   = {
+    Name = "utrains default subnet for ansible"
   }
 }
-
-# Create Internet Gateway
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.my-vpc.id
-
-  tags = {
-    Name = "ansible IGW"
-  }
-}
-
-# Create Web layber route table
-resource "aws_route_table" "web-rt" {
-  vpc_id = aws_vpc.my-vpc.id
-
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
-
-  tags = {
-    Name = "ansibleRT"
-  }
-}
-
-# Create Web Subnet association with Web route table
-resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.web-subnet.id
-  route_table_id = aws_route_table.web-rt.id
- }
-
-
   # Create Web Security Group
 resource "aws_security_group" "web-sg" {
-    name        = "Web-SG"
+    name        = "ansible-Web-SG"
     description = "Allow ssh inbound traffic"
-    vpc_id      = aws_vpc.my-vpc.id
+    vpc_id      = aws_default_vpc.default_vpc.id
   
     ingress {
       description = "ssh from VPC"
@@ -81,7 +43,7 @@ resource "aws_security_group" "web-sg" {
     }
   
     tags = {
-      Name = "Web-SG"
+      Name = "ansible-Web-SG"
     }
 }
   
@@ -135,7 +97,7 @@ module "ec2_instance" {
   monitoring             = true
   user_data            = "${each.value.user_data}"
   vpc_security_group_ids = ["${aws_security_group.web-sg.id}"]
-  subnet_id              = aws_subnet.web-subnet.id
+  subnet_id              = aws_default_subnet.default_az1.id
 
   tags = {
     Terraform   = "true"
