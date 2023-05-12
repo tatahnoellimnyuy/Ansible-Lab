@@ -2,16 +2,6 @@
 resource "aws_default_vpc" "default_vpc" {
 }
 
-# use data source to get all avalablility zones in region
-data "aws_availability_zones" "available_zones" {}
-
-# create default subnet if one does not exit
-resource "aws_default_subnet" "default_az1" {
-  availability_zone = data.aws_availability_zones.available_zones.names[0]
-  tags   = {
-    Name = "utrains default subnet for ansible"
-  }
-}
   # Create Web Security Group
 resource "aws_security_group" "web-sg" {
     name        = "ansible-Web-SG"
@@ -97,7 +87,6 @@ module "ec2_instance" {
   monitoring             = true
   user_data            = "${each.value.user_data}"
   vpc_security_group_ids = ["${aws_security_group.web-sg.id}"]
-  subnet_id              = aws_default_subnet.default_az1.id
 
   tags = {
     Terraform   = "true"
