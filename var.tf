@@ -1,6 +1,6 @@
 variable "region" {
   type    = string
-  default = "ca-central-1"
+  default = "us-east-1"
 }
 
 variable "sg-name" {
@@ -24,8 +24,3 @@ variable "instance_configurations" {
   
 }
 
-locals {
-  ubuntu = data.aws_ami.ubuntu.id
-  debian = data.aws_ami.debian.id
-  amz    = data.aws_ami.amazon-2.id
-}
