@@ -1,9 +1,3 @@
-# output "ssh-command" {
-#   value = { for k, instance in (module.ec2_instance,var.instance_configurations) : k => join("", ["ssh -i keypair.pem ${instance[1].ami}@", instance[0].public_dns])
-
-#   }
-
-# }
 output "ssh_commands" {
   value = {
     for instance_name, instance_config in var.instance_configurations :
