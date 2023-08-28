@@ -9,3 +9,5 @@ sudo pip3.8 install ansible
 
 # #install boto3 and botocore
 sudo pip3.8 install boto3 botocore awscli
+#change terminal color
+echo "PS1='\e[1;32m\u@\h \w$ \e[m'" >> /home/ec2-user/.bash_profile
