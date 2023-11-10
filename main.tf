@@ -52,7 +52,7 @@ module "ec2_instance" {
   ami                    = each.value.ami != "" ? (each.value.ami == "debian" ? data.aws_ami.debian.id : each.value.ami == "ubuntu"   ? data.aws_ami.ubuntu.id : data.aws_ami.amazon-2.id) : data.aws_ami.amazon-2.id
   instance_type          = each.value.instance_type
   key_name               = aws_key_pair.ec2_key.key_name
-  monitoring             = true
+  #monitoring             = true
   user_data              = each.value.user_data != "" ? file("${path.module}/${each.value.user_data}") : ""
   vpc_security_group_ids = ["${aws_security_group.web-sg.id}"]
 
