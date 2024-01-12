@@ -5,7 +5,7 @@ ansible-galaxy collection install amazon.aws
 # # install ansible with python3
 sudo yum update -y
 sudo amazon-linux-extras install python3.8 -y
-sudo pip3.8 install ansible
+sudo pip3.8 pip install ansible==9.0.1
 
 # #install boto3 and botocore
 sudo pip3.8 install boto3 botocore awscli
