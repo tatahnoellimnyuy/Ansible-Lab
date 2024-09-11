@@ -26,7 +26,7 @@ data "aws_ami" "debian" {
 
   filter {
     name   = "name"
-    values = ["debian-*-hvm-*"]
+    values = ["debian-*-amd64-*"]
   }
-  owners = ["379101102735"] # Debian account ID
+  owners = ["136693071363"] # Debian account ID
 }
