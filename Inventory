@@ -1,0 +1,7 @@
+webservers:
+  hosts:
+    web1.example.com:
+    web2.example.com:
+  vars:
+    ansible_user: webadmin
+    ansible_ssh_private_key_file: ~/.ssh/webserver_key
